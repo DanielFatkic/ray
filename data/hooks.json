@@ -1,0 +1,6 @@
+{
+    "load_ray": {
+        "type": "C",
+        "class": "\\IPS\\Dispatcher\\Standard"
+    }
+}
