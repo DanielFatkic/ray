@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language>
+ <app key="ray" version="10000">
+  <word key="__app_ray" js="0">Spatie Ray Helper</word>
+ </app>
+</language>
