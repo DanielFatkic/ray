@@ -48,6 +48,18 @@ ray('large')->large();
 
 ![screenshot](/docs/ray/v1/images/sizes.jpg)
 
+### Adding a label
+
+You can customize the label displayed next to item with the `label` function.
+
+```php
+ray(['John', 'Paul', 'George', 'Ringo'])->label('Beatles');
+```
+
+![screenshot](/docs/ray/v1/images/label.png)
+
+
+
 ### Creating a new screen
 
 You can use `newScreen` (or `clearScreen`) to programmatically create a new screen.
@@ -151,9 +163,77 @@ foreach (range(1, 4) as $i) {
 }
 ```
 
+You may access the value of a named counter using the  `counterValue` function.
+
+```php
+foreach (range(1, 4) as $i) {
+    ray()->count('first');
+
+    if (ray()->counterValue('first') === 2) {
+        echo "counter value is two!";
+    }
+}
+```
+
 This is how that looks like in Ray.
 
 ![screenshot](/docs/ray/v1/images/named-count.png)
+
+### Limiting the number of sent payloads
+
+To limit the number of payloads sent by a particular `ray()` call, use the `limit` function.  It works well for debugging loops.
+
+```php
+foreach (range(1, 10) as $i) {
+    ray()->limit(3)->text("A #{$i}"); // counts to 3
+    ray()->limit(6)->text("B #{$i}"); // counts to 6
+    ray()->text("C #{$i}"); // counts to 10
+}
+```
+
+If the argument passed to `limit()` is a negative number or zero, limiting is disabled.
+
+
+### Using a rate limiter
+
+A rate limiter can help to reduce the amount of sent messages. This would avoid spamming the desktop app, which can be helpful when using Ray in loops.
+
+```php
+Ray::rateLimiter()->max(10); // only 10 messages will be sent
+```
+
+```php
+Ray::rateLimiter()->perSecond(10); // only 10 messages per second will be sent
+```
+
+To remove the rate limits again
+```php
+Ray::rateLimiter()->clear();
+```
+
+A message to the desktop app will be sent once to notify the user the rate limit has been reached.
+
+
+### Sending a payload once
+
+To only send a payload once, use the `once` function.  This is useful for debugging loops.
+
+`once()` may be called with arguments:
+
+
+```php
+foreach (range(1, 10) as $i) {
+    ray()->once($i); // only sends "1"
+}
+```
+
+You can also use `once` without arguments. Any function you chain on `once` will also only be called once.
+
+```php
+foreach (range(1, 10) as $i) {
+    ray()->once()->html("<strong>{$i}</strong>"); // only sends "<strong>1</strong>"
+}
+```
 
 ### Display the class name of an object
 
@@ -293,11 +373,15 @@ ray()->table(['John', 'Paul', 'George', 'Ringo'], 'Beatles');
 
 ### Displaying images
 
-To display an image, call the `image` function and pass either a fully-qualified filename or url as its only argument.
+To display an image, call the `image` function and pass a fully-qualified filename, url, or a valid base64-encoded image as its only argument.
 
 ```php
 ray()->image('https://placekitten.com/200/300');
 ray()->image('/home/user/kitten.jpg');
+
+// display base64-encoded images
+ray()->image('data:image/png;base64,iVBORw0KGgoAAA...truncated');
+ray()->image('iVBORw0KGgoAAA...truncated');
 ```
 
 ### Rendering HTML
@@ -306,6 +390,15 @@ To render a piece of HTML directly in Ray, you can use the `html` method.
 
 ```php
 ray()->html('<b>Bold string<b>');
+```
+
+### Displaying text content
+
+To display raw text while preserving whitespace formatting, use the `text` method.  If the text contains HTML, it will be displayed as-is and is not rendered.
+
+```php
+ray()->text('<em>this string is html encoded</em>');
+ray()->text('  whitespace formatting' . PHP_EOL . '   is preserved as well.');
 ```
 
 ### Updating displayed items
@@ -340,12 +433,80 @@ $ray->red()->large()
 You can conditionally show things using the `showIf` method. If you pass a truthy value, the item will be displayed.
 
 ```php
-ray('will be show')->showIf(true);
+ray('will be shown')->showIf(true);
 ray('will not be shown')->showIf(false);
 ```
 
 You can also pass a callable to `showIf`. If the callable returns a truthy value, it will be shown. Otherwise, it will
 not.
+
+### Conditionally sending items to Ray
+
+If for any reason you do not want to send payloads to Ray _unless_ a condition is met, use the `if()` method.
+
+You can call `if()` in two ways: only with a conditional, or with a conditional and a callback.  A conditional can be either a truthy
+value or a callable that returns a truthy value.
+
+
+Note that when `if()` is called with only a conditional, **all** following chained methods will only execute if the conditional 
+is true.  When using a callback with `if()`, all additional chained methods will be called.
+
+```php
+foreach(range(1, 100) as $number) {
+    ray()->if($number < 10)->text("value is less than ten: $number")->blue();
+    
+    ray()->if(function() use ($number) {
+        return $number == 25;
+    })->text("value is twenty-five!")->green();
+    
+    // display "value: #" for every item, and display 
+    // even numbered values as red
+    ray()->text("value: $number")
+        ->if($number % 2 === 0)
+        ->red();
+}
+```
+
+You can even chain multiple `if()` calls without callbacks:
+
+```php
+foreach(range(1, 10) as $number) {
+    // display "value: #" for every item, and display even values as red
+    // and odd values as blue, except for 10 -- which is shown with large 
+    // text and in green.
+    ray()
+        ->text("value: $number")
+        ->if($number % 2 === 0)
+            ->red()
+        ->if($number % 2 !== 0)
+            ->blue()
+        ->if($number === 10)
+            ->large()
+            ->green();
+}
+```
+
+Or chain multiple calls to `if()` with callbacks that don't affect the chained methods following them:
+
+```php
+foreach(range(1, 100) as $number) {
+    // display "value: #" for all items and make each item green.
+    // items less than 20 will have their text changed.
+    // when the value is an even number, the item will be displayed with large text.
+    ray()->text("value: $number")
+        ->if($number < 10, function($ray) use ($number) {
+            $ray->text("value is less than ten: $number");
+        })
+        ->if($number >= 10 && $number < 20, function($ray) use ($number) {
+            $ray->text("value is less than 20: $number");
+        })
+        ->if($number % 2 === 0, function($ray) {
+            $ray->large();
+        })
+        ->green();
+}
+```
+
 
 ### Removing items
 
@@ -384,14 +545,14 @@ ray($largeObject)->hide()
 
 ### Returning items
 
-To make all methods chainable, the `ray()` function returns and instance of `Spatie\Ray\Ray`. To quickly send something
+To make all methods chainable, the `ray()` function returns an instance of `Spatie\Ray\Ray`. To quickly send something
 to Ray and have that something return as a value, use the `pass` function.
 
 ```php
 ray()->pass($anything) // $anything will be returned
 ```
 
-This is handy when, for instance, debuggin return values.
+This is handy when, for instance, debugging return values.
 
 You can change
 
@@ -457,6 +618,66 @@ try {
   ray()->exception($e);
 }
 ```
+
+### Callables and handling exceptions 
+
+You can use Ray to handle exceptions using when passing a callable to `ray` using the `catch` function.  If no exceptions are thrown, the result of the callable is sent to the Ray app.
+
+`catch` accepts several parameters to customize how and which exceptions are handled.  If no parameters are passed, all Exceptions are swallowed and execution continues.
+
+```php
+ray($callable)->catch();
+// execution will continue. 
+```
+
+You can also pass a callable to `catch` to customize the handling of an Exception.  If you typehint the `$exception` variable, only Exceptions of that type will be handled.  PHP 8 union types are supported.
+
+```php
+ray($callable)->catch(function(MyException $exception) {
+   // do something with $exception if it is of the MyException type 
+});
+
+ray($callable)->catch(function($exception) {
+   // handle any exception type
+});
+```
+
+The `catch` callable also accepts a second, optional parameter - `$ray` - that provides access to the current instance of the `Ray` class if you'd like more control over
+
+If you prefer to swallow all exceptions of a given type without specifying a callback, simply pass the Exception class name or names:
+```php
+ray($callable)->catch(CustomExceptionOne::class);
+
+ray($callable)->catch([
+    CustomExceptionOne::class,
+    CustomExceptionTwo::class,
+]);
+```
+
+You can even pass multiple callables and/or classnames as an array to `catch` and they will be treated as possible handlers for any Exceptions:
+
+```php
+ray($callable)->catch([
+    function(CustomExceptionOne $exception) {
+       // handle CustomExceptionOne exceptions
+    },
+    function(CustomExceptionTwo $exception) {
+       // handle CustomExceptionTwo exceptions
+    },    
+    \Exception::class,
+]);
+```
+
+If you would like to immediately throw any unhandled exceptions from the callable after calling `ray`, chain the `throwExceptions` function onto the `ray` call.  If `throwExceptions` is not chained, it will be called when PHP finishes executing the script or application.
+
+```php
+// immediately throw unhandled exceptions
+ray($callable)
+    ->catch(CustomExceptionOne::class)
+    ->throwExceptions();
+```
+
+After calling `catch`, you may continue to chain methods that will be called regardless of whether there was an exception handled or not.
 
 ### Showing raw values
 

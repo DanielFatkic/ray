@@ -2,6 +2,74 @@
 
 All notable changes to `ray` will be documented in this file
 
+## 1.30.2 - 2021-09-10
+
+- align carbon call argument type with carbon payload (#556)
+
+## 1.30.1 - 2021-09-07
+
+- support PHP 8.1
+
+## 1.30.0 - 2021-08-20
+
+- add `catch` method
+
+## 1.29.2 - 2021-08-15
+
+- revert curl check
+
+## 1.29.1 - 2021-08-14
+
+- fix curl check
+
+## 1.29.0 - 2021-08-02
+
+- add `label` method
+
+## 1.28.0 - 2021-07-04
+
+- add support for base64-encoded images (#499)
+
+## 1.27.1 - 2021-06-24
+
+- remove typehint to allow override
+
+## 1.27.0 - 2021-06-23
+
+- add `once()` (#481)
+
+## 1.26.0 - 2021-06-10
+
+- add rate limiter
+
+## 1.25.0 - 2021-06-07
+
+- add `if` method
+
+## 1.24.0 - 2021-06-04
+
+- add limit method (#464)
+
+## 1.23.0 - 2021-05-29
+
+- add `text` method (#460)
+
+## 1.22.1 - 2021-04-28
+
+- allow Throwables to be logged
+
+## 1.22.0 - 2021-04-28
+
+- access named counter values (#437)
+
+## 1.21.4 - 2021-04-17
+
+- color exceptions red by default
+
+## 1.21.3 - 2021-04-14
+
+- allow spatie/macroable v2 [#426](https://github.com/spatie/ray/pull/426)
+
 ## 1.21.2 - 2021-03-04
 
 - fix hostname for other ray packages

@@ -43,6 +43,46 @@ ray()->showQueries(function() {
 User::all(); // this query won't be displayed.
 ```
 
+### Counting queries
+
+If you're interested in how many queries a given piece of code executes, and what the runtime of those queries is, you can use `countQueries`. It expects you to pass a closure in which all the executed queries will be counted.
+
+```php
+ray()->countQueries(function() {
+    User::all();
+    User::all();
+    User::all();
+});
+```
+
+![screenshot](/docs/ray/v1/images/query-count.png)
+
+### Manually showing a query
+
+You can manually send a query to Ray by calling `ray()` on a query. 
+
+```php
+User::query()
+    ->where('email', 'john@example.com')
+    ->ray()
+    ->first();
+```
+
+![screenshot](/docs/ray/v1/images/single-query.png)
+
+You can call `ray()` multiple times to see how a query is being built up.
+
+```php
+User::query()
+    ->where('first_name', 'John')
+    ->ray()
+    ->where('last_name', 'Doe')
+    ->ray()
+    ->first();
+```
+
+![screenshot](/docs/ray/v1/images/single-query-multiple-calls.png)
+
 ### Showing events
 
 You can display all events that are executed by calling `showEvents` (or `events`).
@@ -136,6 +176,32 @@ Cache::get('another-key');
 
 To stop showing cache events, call `stopShowingCache`.
 
+### Showing http client requests
+
+You can display all http client requests and responses using `showHttpClientRequests`
+
+```php
+ray()->showHttpClientRequests();
+
+Http::get('https://example.com/api/users');
+```
+
+![screenshot](/docs/ray/v1/images/http.png)
+
+To stop showing http client events, call `stopShowingHttpClientRequests`.
+
+Alternatively, you can pass a callable to `showHttpClientRequests`. Only the http requests made inside that callable will be displayed in Ray.
+
+```php
+Http::get('https://example.com'); // this request won't be displayed.
+
+ray()->showHttpClientRequests(function() {
+    Http::get('https://example.com'); // this request will be displayed.
+});
+
+Http::get('https://example.com'); // this request won't be displayed.
+```
+
 ### Handling models
 
 Using the `model` function, you can display the attributes and relations of a model.
@@ -196,7 +262,7 @@ ray()->markdown('# Hello World');
 
 ### Displaying collections
 
-In a Laravel app, Ray will automatically register a `ray` collection macro to easily send collections to ray.
+Ray will automatically register a `ray` collection macro to easily send collections to ray.
 
 ```php
 collect(['a', 'b', 'c'])
@@ -206,6 +272,30 @@ collect(['a', 'b', 'c'])
 ```
 
 ![screenshot](/docs/ray/v1/images/collection.jpg)
+
+### Usage with a `Stringable`
+
+Ray will automatically register a `ray` macro to `Stringable` to easily send `Stringable`s to Ray.
+
+```php
+Str::of('Lorem')
+   ->append(' Ipsum')
+   ->ray()
+   ->append(' Dolor Sit Amen');
+```
+
+![screenshot](/docs/ray/v1/images/stringable.jpg)
+
+
+### Displaying environment variables
+
+You can use the `env()` method to display all environment variables as loaded from your `.env` file.  You may optionally pass an array of variable names to exclusively display.
+
+```php
+ray()->env();
+
+ray()->env(['APP_NAME', 'DB_DATABASE', 'DB_HOSTNAME', 'DB_PORT']);
+```
 
 ### Using Ray in Blade views
 

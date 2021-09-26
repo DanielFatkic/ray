@@ -8,8 +8,9 @@ For Laravel projects you can create a `ray.php` file in your project directory (
 Note: if everyone working on the project needs the same configuration, you can put the file in the `config` directory as well.
 
 ```php
-// save this in a file called "ray.php" in the root directory of your project; not in the Laravel "config" directory
 <?php
+// Save this in a file called "ray.php" in the root directory of your project; not in the Laravel "config" directory
+
 return [
     /*
     * This settings controls whether data should be sent to Ray.
@@ -21,7 +22,7 @@ return [
     /*
     * When enabled, all cache events  will automatically be sent to Ray.
     */
-    'send_cache_to_ray' => env('SEND CACHE_TO_RAY', false),
+    'send_cache_to_ray' => env('SEND_CACHE_TO_RAY', false),
 
     /*
     * When enabled, all things passed to `dump` or `dd`
@@ -32,7 +33,7 @@ return [
     /*
     * When enabled all job events will automatically be sent to Ray.
     */
-    'send_jobs_to_ray' => env('SEND JOBS_TO_RAY', false),
+    'send_jobs_to_ray' => env('SEND_JOBS_TO_RAY', false),
 
     /*
     * When enabled, all things logged to the application log
@@ -43,17 +44,22 @@ return [
     /*
     * When enabled, all queries will automatically be sent to Ray.
     */
-    'send_queries_to_ray' => env('SEND QUERIES_TO_RAY', false),
+    'send_queries_to_ray' => env('SEND_QUERIES_TO_RAY', false),
 
     /*
     * When enabled, all requests made to this app will automatically be sent to Ray.
     */
-    'send_requests_to_ray' => env('SEND REQUESTS_TO_RAY', false),
+    'send_requests_to_ray' => env('SEND_REQUESTS_TO_RAY', false),
     
     /*
     * When enabled, all views that are rendered automatically be sent to Ray.
     */
-    'send_views_to_ray' => env('SEND VIEWS_TO_RAY', false),
+    'send_views_to_ray' => env('SEND_VIEWS_TO_RAY', false),
+
+    /*
+     * When enabled, all exceptions will be automatically sent to Ray.
+     */
+    'send_exceptions_to_ray' => env('SEND_EXCEPTIONS_TO_RAY', true),
 
     /*
     * The host used to communicate with the Ray app.
