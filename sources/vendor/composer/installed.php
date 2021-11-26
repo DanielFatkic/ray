@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '669cd41d11fafe59318ffbd08841ee5110ddd2ed',
+    'reference' => 'f64b6828d1d022b68ad6c22511ad97f7538f2f93',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '669cd41d11fafe59318ffbd08841ee5110ddd2ed',
+      'reference' => 'f64b6828d1d022b68ad6c22511ad97f7538f2f93',
     ),
     'brick/math' => 
     array (
@@ -31,12 +31,12 @@
     ),
     'psr/container' => 
     array (
-      'pretty_version' => '1.1.1',
-      'version' => '1.1.1.0',
+      'pretty_version' => '1.1.2',
+      'version' => '1.1.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8622567409010282b7aeebe4bb841fe98b58dcaf',
+      'reference' => '513e0666f7216c7459170d56df27dfcefe1689ea',
     ),
     'ramsey/collection' => 
     array (
@@ -65,12 +65,12 @@
     ),
     'spatie/backtrace' => 
     array (
-      'pretty_version' => '1.2.0',
-      'version' => '1.2.0.0',
+      'pretty_version' => '1.2.1',
+      'version' => '1.2.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '9b4df807fb65aaa8006dcd7a7ccdef8fb4bb002e',
+      'reference' => '4ee7d41aa5268107906ea8a4d9ceccde136dbd5b',
     ),
     'spatie/macroable' => 
     array (
@@ -83,12 +83,21 @@
     ),
     'spatie/ray' => 
     array (
-      'pretty_version' => '1.30.3',
-      'version' => '1.30.3.0',
+      'pretty_version' => '1.32.0',
+      'version' => '1.32.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5ec8449def9735d58b66d8024776becb3b020288',
+      'reference' => 'e144fa04fdd737c54fc98c32c4b897df1b622d3b',
+    ),
+    'symfony/deprecation-contracts' => 
+    array (
+      'pretty_version' => 'v2.5.0',
+      'version' => '2.5.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6f981ee24cf69ee7ce9736146d1c57c2780598a8',
     ),
     'symfony/polyfill-ctype' => 
     array (
@@ -128,12 +137,12 @@
     ),
     'symfony/service-contracts' => 
     array (
-      'pretty_version' => 'v2.4.0',
-      'version' => '2.4.0.0',
+      'pretty_version' => 'v2.5.0',
+      'version' => '2.5.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb',
+      'reference' => '1ab11b933cd6bc5464b08e81e2c5b07dec58b0fc',
     ),
     'symfony/stopwatch' => 
     array (
@@ -146,12 +155,12 @@
     ),
     'symfony/var-dumper' => 
     array (
-      'pretty_version' => 'v5.3.8',
-      'version' => '5.3.8.0',
+      'pretty_version' => 'v5.3.11',
+      'version' => '5.3.11.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'eaaea4098be1c90c8285543e1356a09c8aa5c8da',
+      'reference' => 'a029b3a11b757f9cc8693040339153b4745a913f',
     ),
   ),
 );

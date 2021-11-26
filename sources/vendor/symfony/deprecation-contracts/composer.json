@@ -1,8 +1,7 @@
 {
-    "name": "symfony/service-contracts",
+    "name": "symfony/deprecation-contracts",
     "type": "library",
-    "description": "Generic abstractions related to writing services",
-    "keywords": ["abstractions", "contracts", "decoupling", "interfaces", "interoperability", "standards"],
+    "description": "A generic function and convention to trigger deprecation notices",
     "homepage": "https://symfony.com",
     "license": "MIT",
     "authors": [
@@ -16,18 +15,12 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5",
-        "psr/container": "^1.1",
-        "symfony/deprecation-contracts": "^2.1"
-    },
-    "conflict": {
-        "ext-psr": "<1.1|>=2"
-    },
-    "suggest": {
-        "symfony/service-implementation": ""
+        "php": ">=7.1"
     },
     "autoload": {
-        "psr-4": { "Symfony\\Contracts\\Service\\": "" }
+        "files": [
+            "function.php"
+        ]
     },
     "minimum-stability": "dev",
     "extra": {
