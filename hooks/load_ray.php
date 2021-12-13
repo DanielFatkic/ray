@@ -14,6 +14,7 @@ abstract class ray_hook_load_ray extends _HOOK_CLASS_
 	public function init()
 	{
 		return parent::init();
+		$this->loadRay();
 	}
   
 	protected function loadRay()
