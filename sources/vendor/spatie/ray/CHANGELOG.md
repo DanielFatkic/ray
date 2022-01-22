@@ -2,6 +2,40 @@
 
 All notable changes to `ray` will be documented in this file
 
+## 1.33.0 - 2022-01-13
+
+1.33.0
+
+- add support for screen colors
+- add support for project names
+- send hostname along with request
+
+## 1.33.0 - 2022-01-13
+
+- add support for screen colors
+- add support for project names
+- send hostname along with request
+
+## 1.32.3 - 2022-01-09
+
+- allow Laravel 9
+
+## 1.32.2 - 2021-12-20
+
+- allow symfony 6
+
+## 1.32.1 - 2021-11-30
+
+- fix deprecation warning in PHP 8.1
+
+## 1.32.0 - 2021-11-26
+
+## What's Changed
+
+- Add separator payload by @freekmurze in https://github.com/spatie/ray/pull/599
+
+**Full Changelog**: https://github.com/spatie/ray/compare/1.31.0...1.32.0
+
 ## 1.31.0 - 2021-11-17
 
 ## What's Changed

@@ -11,6 +11,7 @@ use Spatie\Backtrace\Backtrace;
 use Spatie\LaravelRay\Ray as LaravelRay;
 use Spatie\Macroable\Macroable;
 use Spatie\Ray\Concerns\RayColors;
+use Spatie\Ray\Concerns\RayScreenColors;
 use Spatie\Ray\Concerns\RaySizes;
 use Spatie\Ray\Origin\DefaultOriginFactory;
 use Spatie\Ray\Payloads\CallerPayload;
@@ -34,6 +35,7 @@ use Spatie\Ray\Payloads\NewScreenPayload;
 use Spatie\Ray\Payloads\NotifyPayload;
 use Spatie\Ray\Payloads\PhpInfoPayload;
 use Spatie\Ray\Payloads\RemovePayload;
+use Spatie\Ray\Payloads\ScreenColorPayload;
 use Spatie\Ray\Payloads\SeparatorPayload;
 use Spatie\Ray\Payloads\ShowAppPayload;
 use Spatie\Ray\Payloads\SizePayload;
@@ -55,6 +57,7 @@ use TypeError;
 class Ray
 {
     use RayColors;
+    use RayScreenColors;
     use RaySizes;
     use Macroable;
 
@@ -94,6 +97,9 @@ class Ray
     /** @var RateLimiter */
     public static $rateLimiter;
 
+    /** @var string */
+    public static $projectName = '';
+
     public static function create(Client $client = null, string $uuid = null): self
     {
         $settings = SettingsFactory::createFromConfigFile();
@@ -116,6 +122,18 @@ class Ray
         static::$enabled = static::$enabled ?? $this->settings->enable ?? true;
 
         static::$rateLimiter = static::$rateLimiter ?? RateLimiter::disabled();
+    }
+
+    /**
+     * @param string $projectName
+     *
+     * @return $this
+     */
+    public function project($projectName): self
+    {
+        static::$projectName = $projectName;
+
+        return $this;
     }
 
     public function enable(): self
@@ -169,6 +187,13 @@ class Ray
     public function color(string $color): self
     {
         $payload = new ColorPayload($color);
+
+        return $this->sendRequest($payload);
+    }
+
+    public function screenColor(string $color): self
+    {
+        $payload = new ScreenColorPayload($color);
 
         return $this->sendRequest($payload);
     }
@@ -722,6 +747,7 @@ class Ray
         $allMeta = array_merge([
             'php_version' => phpversion(),
             'php_version_id' => PHP_VERSION_ID,
+            'project_name' => static::$projectName,
         ], $meta);
 
         foreach ($payloads as $payload) {
